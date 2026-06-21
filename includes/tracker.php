@@ -110,12 +110,44 @@ function rm_save_page_view(
         PHP_URL_PATH
     );
 
-    $excluded_pages = [
-        '/cliente/login/',
-        '/cliente/dashboard/',
-        '/wp-login.php',
-        '/wp-admin/'
-    ];
+    $path = trailingslashit($path);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Ignorar recursos y rutas técnicas
+    |--------------------------------------------------------------------------
+    */
+    if (
+
+        str_ends_with($path, '.css/') ||
+        str_ends_with($path, '.js/') ||
+        str_ends_with($path, '.png/') ||
+        str_ends_with($path, '.jpg/') ||
+        str_ends_with($path, '.jpeg/') ||
+        str_ends_with($path, '.svg/') ||
+        str_ends_with($path, '.ico/') ||
+
+        str_contains($path, '/wp-content/') ||
+        str_contains($path, '/wp-json/') ||
+        str_contains($path, '/feed/') ||
+        str_contains($path, '/wp-admin/') ||
+        str_contains($path, '/wp-login.php')
+
+    ) {
+        return;
+    }
+
+    if (
+        isset($_GET['elementor-preview'])
+    ) {
+        return;
+    }
+
+    $config =
+        rm_get_config();
+
+    $excluded_pages =
+        $config['excluded_pages'];
 
     if (
         in_array(

@@ -6,7 +6,11 @@ if (!defined('ABSPATH')) {
 
 <div class="rm-container">
 
-    <h1>Dashboard de Métricas</h1>
+    <h1>
+        <?= esc_html(
+            $config['labels']['dashboard_title']
+        ); ?>
+    </h1>
 
     <p>
         Bienvenido
@@ -102,15 +106,23 @@ if (!defined('ABSPATH')) {
 
         <div class="rm-card">
 
-            <h2>Revistas más abiertas</h2>
+            <h2>
+                <?= esc_html(
+                    $config['labels']['resource']
+                ); ?>
+                más interactuados
+            </h2>
 
             <ul>
-                <?php foreach ($top_pdfs as $pdf): ?>
+                <?php foreach ($top_resources as $resource): ?>
 
                     <li>
-                        <?= esc_html($pdf->recurso); ?>
-                        -
-                        <?= $pdf->total; ?>
+                        <span>
+                            <?= esc_html($resource->recurso); ?>
+                        </span>
+                        <strong>
+                            <?= $resource->total; ?>
+                        </strong>
                     </li>
 
                 <?php endforeach; ?>

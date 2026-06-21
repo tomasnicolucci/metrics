@@ -34,8 +34,11 @@ function rm_dashboard_shortcode()
     $top_pages =
         rm_get_top_pages();
 
-    $top_pdfs =
-        rm_get_top_pdfs();
+    $top_resources =
+        rm_get_top_resources();
+
+    $config =
+        rm_get_config();
 
     $countries =
         rm_get_top_countries();

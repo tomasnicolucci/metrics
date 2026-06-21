@@ -110,12 +110,12 @@ function rm_api_event(
     WP_REST_Request $request
 )
 {
-    rm_save_event(
+    rm_track_event(
         rm_get_session_id(),
         sanitize_text_field(
             $request['type']
         ),
-        esc_url_raw(
+        sanitize_text_field(
             $request['resource']
         )
     );

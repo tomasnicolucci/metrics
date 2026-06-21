@@ -2,7 +2,7 @@
 /*
 Plugin Name: Metrics
 Plugin URI: 
-Description: Dashboard privado de métricas para clientes.
+Description: Dashboard privado de métricas para clientes, usuarios administradores de paginas web Wordpress.
 Version: 1.0.0
 Author: Tomas Nicolucci
 License: GPL2
@@ -31,6 +31,7 @@ require_once RM_PATH . 'includes/stats.php';
 require_once RM_PATH . 'includes/api.php';
 require_once RM_PATH . 'includes/cron.php';
 require_once RM_PATH . 'includes/reports.php';
+require_once RM_PATH . 'includes/config.php';
 
 register_activation_hook(
     __FILE__,

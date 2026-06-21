@@ -65,6 +65,39 @@ document.addEventListener(
     'click',
     function (e) {
 
+        /*
+        --------------------------------------
+        Eventos genéricos
+        --------------------------------------
+        */
+        const element =
+            e.target.closest(
+                '.rm-track-event'
+            );
+
+        if (element) {
+
+            rmPost(
+                '/event',
+                {
+                    type:
+                        element.dataset.rmType ||
+                        'click',
+
+                    resource:
+                        element.dataset.rmResource ||
+                        ''
+                }
+            );
+
+            return;
+        }
+
+        /*
+        --------------------------------------
+        Compatibilidad con PDFs
+        --------------------------------------
+        */
         const link =
             e.target.closest('a');
 
@@ -76,16 +109,19 @@ document.addEventListener(
             link.href || '';
 
         if (
-            href.includes('drive.google.com') ||
-            href.toLowerCase().endsWith('.pdf')
+            href.includes(
+                'drive.google.com'
+            ) ||
+            href
+                .toLowerCase()
+                .endsWith('.pdf')
         ) {
+
             rmPost(
                 '/event',
                 {
-                    type:
-                        'pdf_open',
-                    resource:
-                        href
+                    type: 'click',
+                    resource: href
                 }
             );
         }

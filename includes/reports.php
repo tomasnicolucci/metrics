@@ -93,7 +93,7 @@ function rm_get_top_pages($limit = 10)
     );
 }
 
-function rm_get_top_pdfs($limit = 10)
+function rm_get_top_resources($limit = 10)
 {
     global $wpdb;
 
@@ -108,7 +108,7 @@ function rm_get_top_pdfs($limit = 10)
                 recurso,
                 COUNT(*) AS total
             FROM $table
-            WHERE tipo = 'pdf_open'
+            WHERE tipo = 'click'
             GROUP BY recurso
             ORDER BY total DESC
             LIMIT %d
