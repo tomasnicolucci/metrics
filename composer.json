@@ -1,0 +1,6 @@
+{
+    "require": {
+        "mobiledetect/mobiledetectlib": "^4.11",
+        "geoip2/geoip2": "^3.3"
+    }
+}

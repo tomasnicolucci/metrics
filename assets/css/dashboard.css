@@ -1,0 +1,170 @@
+/* ==========================
+   CONTENEDOR PRINCIPAL
+========================== */
+
+.rm-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px;
+    min-height: 100vh;
+    background: #f5f7fa;
+    box-sizing: border-box;
+}
+
+/* ==========================
+   TEXTOS DEL DASHBOARD
+========================== */
+
+.rm-container,
+.rm-container * {
+    color: #111827;
+    box-sizing: border-box;
+}
+
+.rm-container h1,
+.rm-container h2,
+.rm-container h3,
+.rm-container p,
+.rm-container li,
+.rm-container span,
+.rm-container a {
+    color: #111827 !important;
+}
+
+.rm-container h1 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.rm-container h2 {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.rm-container p {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.rm-container hr {
+    border: none;
+    border-top: 1px solid #d1d5db;
+    margin: 40px 0;
+}
+
+/* ==========================
+   GRID
+========================== */
+
+.rm-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(250px, 1fr)
+    );
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+/* ==========================
+   TARJETAS
+========================== */
+
+.rm-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 25px;
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.08);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.rm-card:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.rm-card h3 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.rm-number {
+    font-size: 38px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.rm-card ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.rm-card li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+
+    padding: 12px 16px;
+    margin-bottom: 10px;
+}
+
+/* ==========================
+   LISTAS
+========================== */
+
+.rm-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.rm-container li {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    box-shadow:
+        0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================
+   CANVAS / GRÁFICOS
+========================== */
+
+#rm-visits-chart {
+    width: 100%;
+    min-height: 300px;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width: 768px) {
+    .rm-container {
+        padding: 20px;
+    }
+
+    .rm-container h1 {
+        font-size: 28px;
+    }
+
+    .rm-number {
+        font-size: 32px;
+    }
+}
