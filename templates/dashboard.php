@@ -24,7 +24,7 @@ if (!defined('ABSPATH')) {
         <div class="rm-card">
             <h3>Visitas hoy</h3>
 
-            <div class="rm-number">
+            <div class="rm-number" id="rm-today-visits">
                 <?= $summary['visitas_hoy']; ?>
             </div>
         </div>
@@ -58,7 +58,37 @@ if (!defined('ABSPATH')) {
 
     </div>
 
-    <!-- Gráfico -->
+    <script>
+
+        const rmChartLabels =
+            <?= wp_json_encode(
+                array_map(
+                    function ($row) {
+                        return date(
+                            'd/m',
+                            strtotime(
+                                $row->fecha
+                            )
+                        );
+                    },
+                    $daily_visits
+                )
+            ); ?>;
+
+        const rmChartValues =
+            <?= wp_json_encode(
+                array_map(
+                    function ($row) {
+                        return (int)
+                            $row->visitas;
+                    },
+                    $daily_visits
+                )
+            ); ?>;
+
+    </script>
+
+    <!-- Grafico -->
     <div class="rm-grid">
 
         <div class="rm-card">
@@ -134,7 +164,7 @@ if (!defined('ABSPATH')) {
 
             <h2>Países</h2>
 
-            <ul>
+            <ul id="rm-countries-list">
                 <?php foreach ($countries as $country): ?>
 
                     <li>

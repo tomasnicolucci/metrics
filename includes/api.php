@@ -36,6 +36,30 @@ add_action('rest_api_init', function () {
         ]
     );
 
+    register_rest_route(
+        'rm/v1',
+        '/active-users',
+        [
+            'methods' => 'GET',
+            'callback' => 'rm_api_active_users',
+            'permission_callback' => function () {
+                return is_user_logged_in();
+            }
+        ]
+    );
+
+    register_rest_route(
+        'rm/v1',
+        '/dashboard-realtime',
+        [
+            'methods' => 'GET',
+            'callback' => 'rm_api_dashboard_realtime',
+            'permission_callback' => function () {
+                return is_user_logged_in();
+            }
+        ]
+    );
+
 });
 
 function rm_api_heartbeat()
@@ -122,5 +146,35 @@ function rm_api_event(
 
     return [
         'success' => true
+    ];
+}
+
+function rm_api_active_users()
+{
+    return [
+        'total' =>
+            rm_get_active_visitors_count()
+    ];
+}
+
+function rm_api_dashboard_realtime()
+{
+    $summary =
+        rm_get_summary();
+
+    return [
+
+        'active_users' =>
+            $summary[
+                'visitantes_activos'
+            ],
+
+        'today_visits' =>
+            $summary[
+                'visitas_hoy'
+            ],
+
+        'countries' =>
+            rm_get_countries()
     ];
 }

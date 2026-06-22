@@ -127,3 +127,107 @@ document.addEventListener(
         }
     }
 );
+
+const rmActiveUsers =
+    document.getElementById(
+        'rm-active-users'
+    );
+
+const rmTodayVisits =
+    document.getElementById(
+        'rm-today-visits'
+    );
+
+const rmCountries =
+    document.getElementById(
+        'rm-countries-list'
+    );
+
+if (
+    rmActiveUsers ||
+    rmTodayVisits ||
+    rmCountries
+) {
+
+    setInterval(
+        async function () {
+
+            try {
+
+                const response =
+                    await fetch(
+                        rmTracker.apiUrl +
+                        '/dashboard-realtime',
+                        {
+                            credentials:
+                                'same-origin',
+
+                            headers: {
+                                'X-WP-Nonce':
+                                    rmTracker.nonce
+                            }
+                        }
+                    );
+
+                if (
+                    !response.ok
+                ) {
+                    return;
+                }
+
+                const data =
+                    await response.json();
+
+                if (
+                    rmActiveUsers
+                ) {
+                    rmActiveUsers.textContent =
+                        data.active_users;
+                }
+
+                if (
+                    rmTodayVisits
+                ) {
+                    rmTodayVisits.textContent =
+                        data.today_visits;
+                }
+
+                if (
+                    rmCountries &&
+                    Array.isArray(
+                        data.countries
+                    )
+                ) {
+
+                    let html = '';
+
+                    data.countries.forEach(
+                        function (
+                            country
+                        ) {
+
+                            html += `
+                                <li>
+                                    ${country.pais}
+                                    -
+                                    ${country.total}
+                                </li>
+                            `;
+                        }
+                    );
+
+                    rmCountries.innerHTML =
+                        html;
+                }
+
+            } catch (e) {
+                console.error(
+                    e
+                );
+            }
+
+        },
+        15000
+    );
+
+}

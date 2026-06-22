@@ -23,6 +23,12 @@ function rm_get_summary()
     $today =
         current_time('Y-m-d');
 
+    $config = rm_get_config();
+
+    $minutes = intval(
+        $config['active_minutes']
+    );
+
     return [
 
         'visitas_hoy' =>
@@ -56,15 +62,18 @@ function rm_get_summary()
 
         'visitantes_activos' =>
             (int) $wpdb->get_var(
-                "
-                SELECT COUNT(*)
-                FROM $sessions
-                WHERE last_activity >=
-                DATE_SUB(
-                    NOW(),
-                    INTERVAL 2 MINUTE
+                $wpdb->prepare(
+                    "
+                    SELECT COUNT(*)
+                    FROM $sessions
+                    WHERE last_activity >=
+                    DATE_SUB(
+                        NOW(),
+                        INTERVAL %d MINUTE
+                    )
+                    ",
+                    $minutes
                 )
-                "
             )
     ];
 }
@@ -248,5 +257,89 @@ function rm_get_page_label(
             ' ',
             $path
         )
+    );
+}
+
+function rm_get_daily_visits(
+    $days = 30
+)
+{
+    global $wpdb;
+
+    $table =
+        $wpdb->prefix .
+        'rm_stats_daily';
+
+    $rows =
+        $wpdb->get_results(
+            $wpdb->prepare(
+                "
+                SELECT
+                    fecha,
+                    visitas
+                FROM $table
+                WHERE fecha >=
+                    DATE_SUB(
+                        CURDATE(),
+                        INTERVAL %d DAY
+                    )
+                ORDER BY fecha ASC
+                ",
+                $days
+            )
+        );
+
+    /*
+     * Inicializar los últimos N días en 0
+     */
+    $result = [];
+
+    for (
+        $i = $days - 1;
+        $i >= 0;
+        $i--
+    ) {
+
+        $date =
+            date(
+                'Y-m-d',
+                strtotime(
+                    "-{$i} days"
+                )
+            );
+
+        $result[$date] = [
+            'dia' =>
+                date(
+                    'd/m',
+                    strtotime($date)
+                ),
+
+            'total' => 0
+        ];
+    }
+
+    /*
+     * Reemplazar con datos reales
+     */
+    foreach ($rows as $row) {
+
+        $date =
+            $row->fecha;
+
+        if (
+            isset(
+                $result[$date]
+            )
+        ) {
+
+            $result[$date]['total'] =
+                (int)
+                $row->visitas;
+        }
+    }
+
+    return array_values(
+        $result
     );
 }

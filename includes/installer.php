@@ -9,6 +9,7 @@ function rm_activate()
     rm_create_role();
     rm_create_tables();
     rm_create_pages();
+    rm_schedule_daily_stats();
 
     flush_rewrite_rules();
 }

@@ -72,7 +72,7 @@ function rm_get_config()
         | Tiempo de visitante activo
         |--------------------------------------
         */
-        'active_minutes' => 5,
+        'active_minutes' => 1,
 
         'default_event_type' => 'click'
     ];

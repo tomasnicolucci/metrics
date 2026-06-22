@@ -52,7 +52,36 @@ function rm_dashboard_shortcode()
     $visits_chart =
         rm_get_visits_last_30_days();
 
+    $daily_visits =
+        rm_get_daily_visits();
+
     ob_start();
+
+    wp_enqueue_script(
+        'chart-js',
+        'https://cdn.jsdelivr.net/npm/chart.js',
+        [],
+        '4.5.0',
+        true
+    );
+
+    wp_enqueue_script(
+        'rm-dashboard',
+        RM_URL .
+        'assets/js/dashboard.js',
+        ['chart-js'],
+        RM_VERSION,
+        true
+    );
+
+    wp_localize_script(
+        'rm-dashboard',
+        'rmDashboard',
+        [
+            'visits' =>
+                $daily_visits
+        ]
+    );
 
     include RM_PATH .
         'templates/dashboard.php';

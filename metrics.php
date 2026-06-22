@@ -32,6 +32,7 @@ require_once RM_PATH . 'includes/api.php';
 require_once RM_PATH . 'includes/cron.php';
 require_once RM_PATH . 'includes/reports.php';
 require_once RM_PATH . 'includes/config.php';
+require_once RM_PATH . 'includes/realtime.php';
 
 register_activation_hook(
     __FILE__,
@@ -64,5 +65,17 @@ function rm_enqueue_scripts()
                 'wp_rest'
             )
         ]
+    );
+}
+
+register_deactivation_hook(
+    __FILE__,
+    'rm_deactivate'
+);
+
+function rm_deactivate()
+{
+    wp_clear_scheduled_hook(
+        'rm_generate_daily_stats'
     );
 }
