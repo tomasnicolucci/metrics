@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-function rm_get_summary()
+function rm_get_summary($period = '30')
 {
     global $wpdb;
 
@@ -20,8 +20,16 @@ function rm_get_summary()
         $wpdb->prefix .
         'rm_events';
 
-    $today =
-        current_time('Y-m-d');
+    $dates =
+        rm_get_period_dates(
+            $period
+        );
+
+    $from =
+        $dates['from'];
+
+    $to =
+        $dates['to'];
 
     $config = rm_get_config();
 
@@ -37,27 +45,48 @@ function rm_get_summary()
                     "
                     SELECT COUNT(*)
                     FROM $views
-                    WHERE DATE(fecha) = %s
+                    WHERE DATE(fecha)
+                    BETWEEN %s
+                    AND %s
                     ",
-                    $today
+                    $from,
+                    $to
                 )
             ),
 
         'usuarios_unicos' =>
             (int) $wpdb->get_var(
-                "
-                SELECT COUNT(DISTINCT ip_hash)
-                FROM $sessions
-                "
+                $wpdb->prepare(
+                    "
+                    SELECT COUNT(
+                        DISTINCT ip_hash
+                    )
+                    FROM $sessions
+                    WHERE DATE(
+                        first_visit
+                    )
+                    BETWEEN %s
+                    AND %s
+                    ",
+                    $from,
+                    $to
+                )
             ),
 
         'pdf_opens' =>
             (int) $wpdb->get_var(
-                "
-                SELECT COUNT(*)
-                FROM $events
-                WHERE tipo = 'pdf_open'
-                "
+                $wpdb->prepare(
+                    "
+                    SELECT COUNT(*)
+                    FROM $events
+                    WHERE tipo = 'pdf_open'
+                    AND DATE(fecha)
+                    BETWEEN %s
+                    AND %s
+                    ",
+                    $from,
+                    $to
+                )
             ),
 
         'visitantes_activos' =>
@@ -261,7 +290,7 @@ function rm_get_page_label(
 }
 
 function rm_get_daily_visits(
-    $days = 30
+    $period = '30'
 )
 {
     global $wpdb;
@@ -269,6 +298,17 @@ function rm_get_daily_visits(
     $table =
         $wpdb->prefix .
         'rm_stats_daily';
+
+    $dates =
+        rm_get_period_dates(
+            $period
+        );
+
+    $from =
+        $dates['from'];
+
+    $to =
+        $dates['to'];
 
     $rows =
         $wpdb->get_results(
@@ -278,62 +318,63 @@ function rm_get_daily_visits(
                     fecha,
                     visitas
                 FROM $table
-                WHERE fecha >=
-                    DATE_SUB(
-                        CURDATE(),
-                        INTERVAL %d DAY
-                    )
+                WHERE fecha
+                BETWEEN %s
+                AND %s
                 ORDER BY fecha ASC
                 ",
-                $days
+                $from,
+                $to
             )
         );
 
-    /*
-     * Inicializar los últimos N días en 0
-     */
     $result = [];
 
-    for (
-        $i = $days - 1;
-        $i >= 0;
-        $i--
+    $current =
+        strtotime($from);
+
+    $end =
+        strtotime($to);
+
+    while (
+        $current <= $end
     ) {
 
         $date =
             date(
                 'Y-m-d',
-                strtotime(
-                    "-{$i} days"
-                )
+                $current
             );
 
         $result[$date] = [
             'dia' =>
                 date(
                     'd/m',
-                    strtotime($date)
+                    $current
                 ),
-
             'total' => 0
         ];
+
+        $current =
+            strtotime(
+                '+1 day',
+                $current
+            );
     }
 
-    /*
-     * Reemplazar con datos reales
-     */
     foreach ($rows as $row) {
-
-        $date =
-            $row->fecha;
 
         if (
             isset(
-                $result[$date]
+                $result[
+                    $row->fecha
+                ]
             )
         ) {
 
-            $result[$date]['total'] =
+            $result[
+                $row->fecha
+            ]['total'] =
                 (int)
                 $row->visitas;
         }
@@ -342,4 +383,52 @@ function rm_get_daily_visits(
     return array_values(
         $result
     );
+}
+
+function rm_get_period_dates(
+    $period = '30'
+)
+{
+    $today =
+        current_time('Y-m-d');
+
+    switch ($period) {
+
+        case 'today':
+
+            return [
+                'from' => $today,
+                'to' => $today
+            ];
+
+        case '7':
+
+            return [
+                'from' => date(
+                    'Y-m-d',
+                    strtotime('-6 days')
+                ),
+                'to' => $today
+            ];
+
+        case 'month':
+
+            return [
+                'from' => date(
+                    'Y-m-01'
+                ),
+                'to' => $today
+            ];
+
+        case '30':
+        default:
+
+            return [
+                'from' => date(
+                    'Y-m-d',
+                    strtotime('-29 days')
+                ),
+                'to' => $today
+            ];
+    }
 }

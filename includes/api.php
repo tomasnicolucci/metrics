@@ -60,6 +60,29 @@ add_action('rest_api_init', function () {
         ]
     );
 
+    register_rest_route(
+        'rm/v1',
+        '/dashboard-data',
+        [
+            'methods' => 'GET',
+            'callback' => 'rm_api_dashboard_data',
+            'permission_callback' => function () {
+                return
+                    is_user_logged_in()
+                    &&
+                    (
+                        current_user_can(
+                            'administrator'
+                        )
+                        ||
+                        current_user_can(
+                            'cliente_metricas'
+                        )
+                    );
+            }
+        ]
+    );
+
 });
 
 function rm_api_heartbeat()
@@ -175,6 +198,39 @@ function rm_api_dashboard_realtime()
             ],
 
         'countries' =>
-            rm_get_countries()
+            rm_get_active_countries()
+    ];
+}
+
+function rm_api_dashboard_data(
+    WP_REST_Request $request
+)
+{
+    $period =
+        sanitize_text_field(
+            $request['period']
+        );
+
+    return [
+
+        'summary' =>
+            rm_get_summary(),
+
+        'visits' =>
+            rm_get_daily_visits(
+                $period
+            ),
+
+        'countries' =>
+            rm_get_top_countries(),
+
+        'sources' =>
+            rm_get_sources(),
+
+        'top_pages' =>
+            rm_get_top_pages(),
+
+        'top_resources' =>
+            rm_get_top_resources()
     ];
 }

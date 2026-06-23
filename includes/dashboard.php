@@ -49,12 +49,22 @@ function rm_dashboard_shortcode()
     $sources =
         rm_get_sources();
 
-    $visits_chart =
-        rm_get_visits_last_30_days();
+    // $visits_chart =
+    //     rm_get_visits_last_30_days();
+
+    // $daily_visits =
+    //     rm_get_daily_visits();
+
+    $period =
+        $_GET['period']
+        ??
+        '30';
 
     $daily_visits =
-        rm_get_daily_visits();
-
+        rm_get_daily_visits(
+            $period
+        );
+    
     ob_start();
 
     wp_enqueue_script(
@@ -80,6 +90,17 @@ function rm_dashboard_shortcode()
         [
             'visits' =>
                 $daily_visits
+        ]
+    );
+
+    wp_localize_script(
+        'rm-dashboard',
+        'rmTracker',
+        [
+            'apiUrl' => rest_url('rm/v1'),
+            'nonce' => wp_create_nonce(
+                'wp_rest'
+            )
         ]
     );
 

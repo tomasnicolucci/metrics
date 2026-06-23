@@ -19,6 +19,37 @@ if (!defined('ABSPATH')) {
         ); ?>
     </p>
 
+    <div class="rm-filters">
+
+        <label>
+            Período:
+        </label>
+
+        <select id="rm-period">
+
+            <option value="today">
+                Hoy
+            </option>
+
+            <option value="7">
+                Últimos 7 días
+            </option>
+
+            <option
+                value="30"
+                selected
+            >
+                Últimos 30 días
+            </option>
+
+            <option value="month">
+                Este mes
+            </option>
+
+        </select>
+
+    </div>
+
     <div class="rm-grid">
 
         <div class="rm-card">
