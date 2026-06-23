@@ -107,13 +107,21 @@ function rm_get_summary($period = '30')
     ];
 }
 
-function rm_get_top_pages($limit = 10)
+function rm_get_top_pages(
+    $period = '30',
+    $limit = 10
+)
 {
     global $wpdb;
 
     $table =
         $wpdb->prefix .
         'rm_page_views';
+
+    $dates =
+        rm_get_period_dates(
+            $period
+        );
 
     return $wpdb->get_results(
         $wpdb->prepare(
@@ -122,22 +130,35 @@ function rm_get_top_pages($limit = 10)
                 pagina,
                 COUNT(*) AS total
             FROM $table
+            WHERE DATE(fecha)
+                BETWEEN %s
+                AND %s
             GROUP BY pagina
             ORDER BY total DESC
             LIMIT %d
             ",
+            $dates['from'],
+            $dates['to'],
             $limit
         )
     );
 }
 
-function rm_get_top_resources($limit = 10)
+function rm_get_top_resources(
+    $period = '30',
+    $limit = 10
+)
 {
     global $wpdb;
 
     $table =
         $wpdb->prefix .
         'rm_events';
+
+    $dates =
+        rm_get_period_dates(
+            $period
+        );
 
     return $wpdb->get_results(
         $wpdb->prepare(
@@ -146,17 +167,24 @@ function rm_get_top_resources($limit = 10)
                 recurso,
                 COUNT(*) AS total
             FROM $table
-            WHERE tipo = 'click'
+            WHERE tipo = recurso IS NOT NULL
+            AND DATE(fecha)
+                BETWEEN %s
+                AND %s
             GROUP BY recurso
             ORDER BY total DESC
             LIMIT %d
             ",
+            $dates['from'],
+            $dates['to'],
             $limit
         )
     );
 }
 
-function rm_get_top_countries()
+function rm_get_top_countries(
+    $period = '30'
+)
 {
     global $wpdb;
 
@@ -164,16 +192,28 @@ function rm_get_top_countries()
         $wpdb->prefix .
         'rm_sessions';
 
+    $dates =
+        rm_get_period_dates(
+            $period
+        );
+
     return $wpdb->get_results(
-        "
-        SELECT
-            pais,
-            COUNT(*) AS total
-        FROM $table
-        WHERE pais IS NOT NULL
-        GROUP BY pais
-        ORDER BY total DESC
-        "
+        $wpdb->prepare(
+            "
+            SELECT
+                pais,
+                COUNT(*) AS total
+            FROM $table
+            WHERE pais IS NOT NULL
+            AND DATE(first_visit)
+                BETWEEN %s
+                AND %s
+            GROUP BY pais
+            ORDER BY total DESC
+            ",
+            $dates['from'],
+            $dates['to']
+        )
     );
 }
 
@@ -198,7 +238,9 @@ function rm_get_devices()
     );
 }
 
-function rm_get_sources()
+function rm_get_sources(
+    $period = '30'
+)
 {
     global $wpdb;
 
@@ -206,16 +248,28 @@ function rm_get_sources()
         $wpdb->prefix .
         'rm_sessions';
 
+    $dates =
+        rm_get_period_dates(
+            $period
+        );
+
     return $wpdb->get_results(
-        "
-        SELECT
-            source,
-            COUNT(*) AS total
-        FROM $table
-        WHERE source IS NOT NULL
-        GROUP BY source
-        ORDER BY total DESC
-        "
+        $wpdb->prepare(
+            "
+            SELECT
+                source,
+                COUNT(*) AS total
+            FROM $table
+            WHERE source IS NOT NULL
+            AND DATE(first_visit)
+                BETWEEN %s
+                AND %s
+            GROUP BY source
+            ORDER BY total DESC
+            ",
+            $dates['from'],
+            $dates['to']
+        )
     );
 }
 

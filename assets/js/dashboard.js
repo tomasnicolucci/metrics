@@ -80,10 +80,141 @@ async function loadDashboard()
                         rmTracker.nonce
                 }
             }
-        )
+        );
     const data =
         await response.json();
+
+    console.log(data);
     
+    
+    document.getElementById(
+        'rm-today-visits'
+    ).textContent =
+        data.summary.visitas_hoy;
+
+    document.getElementById(
+        'rm-unique-users'
+    ).textContent =
+        data.summary.usuarios_unicos;
+
+    document.getElementById(
+        'rm-pdf-opens'
+    ).textContent =
+        data.summary.pdf_opens;
+
+    document.getElementById(
+        'rm-active-users'
+    ).textContent =
+        data.summary.visitantes_activos;
+
+    const countries =
+        document.getElementById(
+            'rm-countries-list'
+        );
+
+    if (
+        countries &&
+        data.countries
+    ) {
+
+        countries.innerHTML =
+            data.countries
+                .map(
+                    country =>
+                        `
+                        <li>
+                            ${country.pais}
+                            -
+                            ${country.total}
+                        </li>
+                        `
+                )
+                .join('');
+    }
+
+    const sources =
+        document.getElementById(
+            'rm-sources-list'
+        );
+
+    if (
+        sources &&
+        data.sources
+    ) {
+
+        sources.innerHTML =
+            data.sources
+                .map(
+                    source =>
+                        `
+                        <li>
+                            ${source.source}
+                            -
+                            ${source.total}
+                        </li>
+                        `
+                )
+                .join('');
+    }
+
+    const pages =
+        document.getElementById(
+            'rm-pages-list'
+        );
+
+    if (
+        pages &&
+        data.top_pages
+    ) {
+
+        pages.innerHTML =
+            data.top_pages
+                .map(
+                    page =>
+                        `
+                        <li>
+                            <span>
+                                ${page.label}
+                            </span>
+
+                            <strong>
+                                ${page.total}
+                            </strong>
+                        </li>
+                        `
+                )
+                .join('');
+    }
+
+    const resources =
+        document.getElementById(
+            'rm-resources-list'
+        );
+
+    if (
+        resources &&
+        data.top_resources
+    ) {
+
+        resources.innerHTML =
+            data.top_resources
+                .map(
+                    resource =>
+                        `
+                        <li>
+                            <span>
+                                ${resource.recurso}
+                            </span>
+
+                            <strong>
+                                ${resource.total}
+                            </strong>
+                        </li>
+                        `
+                )
+                .join('');
+    }
+
     if (
         visitsChart &&
         data.visits

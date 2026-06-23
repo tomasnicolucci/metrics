@@ -63,7 +63,7 @@ if (!defined('ABSPATH')) {
         <div class="rm-card">
             <h3>Usuarios únicos</h3>
 
-            <div class="rm-number">
+            <div class="rm-number" id="rm-unique-users">
                 <?= $summary['usuarios_unicos']; ?>
             </div>
         </div>
@@ -71,7 +71,7 @@ if (!defined('ABSPATH')) {
         <div class="rm-card">
             <h3>PDFs abiertos</h3>
 
-            <div class="rm-number">
+            <div class="rm-number" id="rm-pdf-opens">
                 <?= $summary['pdf_opens']; ?>
             </div>
         </div>
@@ -144,7 +144,7 @@ if (!defined('ABSPATH')) {
 
             <h2>Páginas más visitadas</h2>
 
-            <ul>
+            <ul id="rm-pages-list">
                 <?php foreach ($top_pages as $page): ?>
 
                     <li>
@@ -174,7 +174,7 @@ if (!defined('ABSPATH')) {
                 más interactuados
             </h2>
 
-            <ul>
+            <ul id="rm-resources-list">
                 <?php foreach ($top_resources as $resource): ?>
 
                     <li>
@@ -231,7 +231,7 @@ if (!defined('ABSPATH')) {
 
             <h2>Fuentes de tráfico</h2>
 
-            <ul>
+            <ul id="rm-sources-list">
                 <?php foreach ($sources as $source): ?>
 
                     <li>

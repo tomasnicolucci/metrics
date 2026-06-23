@@ -66,20 +66,21 @@ add_action('rest_api_init', function () {
         [
             'methods' => 'GET',
             'callback' => 'rm_api_dashboard_data',
-            'permission_callback' => function () {
-                return
-                    is_user_logged_in()
-                    &&
-                    (
-                        current_user_can(
-                            'administrator'
-                        )
-                        ||
-                        current_user_can(
-                            'cliente_metricas'
-                        )
-                    );
-            }
+            'permission_callback' => '__return_true'
+            // function () {
+            //     return
+            //         is_user_logged_in()
+            //         &&
+            //         (
+            //             current_user_can(
+            //                 'administrator'
+            //             )
+            //             ||
+            //             current_user_can(
+            //                 'cliente_metricas'
+            //             )
+            //         );
+            // }
         ]
     );
 
@@ -211,6 +212,33 @@ function rm_api_dashboard_data(
             $request['period']
         );
 
+    $pages =
+        rm_get_top_pages();
+
+    foreach (
+        $pages
+        as $page
+    ) {
+
+        $page->label =
+            rm_get_page_label(
+                $page->pagina
+            );
+    }
+
+    $pages =
+        rm_get_top_pages(
+            $period
+        );
+
+    foreach ($pages as $page) {
+
+        $page->label =
+            rm_get_page_label(
+                $page->pagina
+            );
+    }
+
     return [
 
         'summary' =>
@@ -222,15 +250,21 @@ function rm_api_dashboard_data(
             ),
 
         'countries' =>
-            rm_get_top_countries(),
+            rm_get_top_countries(
+                $period
+            ),
 
         'sources' =>
-            rm_get_sources(),
+            rm_get_sources(
+                $period
+            ),
 
         'top_pages' =>
-            rm_get_top_pages(),
+            $pages,
 
         'top_resources' =>
-            rm_get_top_resources()
+                rm_get_top_resources(
+                    $period
+                )
     ];
 }
