@@ -119,6 +119,32 @@ if (period) {
 
 }
 
+function formatTime(
+    seconds
+)
+{
+    seconds =
+        Number(seconds);
+
+    const minutes =
+        Math.floor(
+            seconds / 60
+        );
+
+    const remaining =
+        seconds % 60;
+
+    return (
+        String(minutes)
+            .padStart(2, '0')
+        +
+        ':'
+        +
+        String(remaining)
+            .padStart(2, '0')
+    );
+}
+
 async function loadDashboard()
 {
     const value =
@@ -322,6 +348,37 @@ async function loadDashboard()
 
                             <strong>
                                 ${resource.total}
+                            </strong>
+                        </li>
+                        `
+                )
+                .join('');
+    }
+
+    const pageTime =
+    document.getElementById(
+        'rm-page-time-list'
+    );
+
+    if (
+        pageTime &&
+        data.avg_page_time
+    ) {
+
+        pageTime.innerHTML =
+            data.avg_page_time
+                .map(
+                    page =>
+                        `
+                        <li>
+                            <span>
+                                ${page.label ?? page.pagina}
+                            </span>
+
+                            <strong>
+                                ${formatTime(
+                                    page.promedio
+                                )}
                             </strong>
                         </li>
                         `

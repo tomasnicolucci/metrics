@@ -167,7 +167,8 @@ function rm_get_top_resources(
                 recurso,
                 COUNT(*) AS total
             FROM $table
-            WHERE tipo = recurso IS NOT NULL
+            WHERE tipo = 'click'
+            AND recurso IS NOT NULL
             AND DATE(fecha)
                 BETWEEN %s
                 AND %s
@@ -485,4 +486,45 @@ function rm_get_period_dates(
                 'to' => $today
             ];
     }
+}
+
+function rm_get_avg_page_time(
+    $period = '30',
+    $limit = 10
+)
+{
+    global $wpdb;
+
+    $table =
+        $wpdb->prefix .
+        'rm_page_time';
+
+    $dates =
+        rm_get_period_dates(
+            $period
+        );
+
+    return $wpdb->get_results(
+        $wpdb->prepare(
+            "
+            SELECT
+                pagina,
+                ROUND ( AVG(segundos) ) AS promedio
+            FROM $table
+            WHERE DATE(fecha)
+                BETWEEN %s
+                AND %s
+            AND pagina NOT LIKE '%wp-json%'
+            AND pagina NOT LIKE '%wp-admin%'
+            AND pagina NOT LIKE '%wp-login%'
+            AND pagina NOT LIKE '%cliente/%'
+            GROUP BY pagina
+            ORDER BY promedio DESC
+            LIMIT %d
+            ",
+            $dates['from'],
+            $dates['to'],
+            $limit
+        )
+    );
 }

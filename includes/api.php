@@ -225,6 +225,22 @@ function rm_api_dashboard_data(
             );
     }
 
+    $avg_page_time =
+        rm_get_avg_page_time(
+            $period
+        );
+
+    foreach (
+        $avg_page_time
+        as $page
+    ) {
+
+        $page->label =
+            rm_get_page_label(
+                $page->pagina
+            );
+    }
+
     return [
 
         'summary' =>
@@ -241,6 +257,9 @@ function rm_api_dashboard_data(
             rm_get_daily_visits(
                 $period
             ),
+
+        'avg_page_time' =>
+            $avg_page_time,
 
         'countries' =>
             rm_get_top_countries(

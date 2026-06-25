@@ -42,6 +42,9 @@ function rm_dashboard_shortcode()
     $top_resources =
         rm_get_top_resources();
 
+    $avg_page_time =
+        rm_get_avg_page_time();
+
     $config =
         rm_get_config();
 

@@ -234,7 +234,7 @@ if (!defined('ABSPATH')) {
                 id="rm-countries-chart"
             ></canvas>
 
-            <ul id="rm-countries-list">
+            <!-- <ul id="rm-countries-list">
                 <?php foreach ($countries as $country): ?>
 
                     <li>
@@ -244,7 +244,7 @@ if (!defined('ABSPATH')) {
                     </li>
 
                 <?php endforeach; ?>
-            </ul>
+            </ul> -->
 
         </div>
 
@@ -286,7 +286,7 @@ if (!defined('ABSPATH')) {
                 id="rm-sources-chart"
             ></canvas>
 
-            <ul id="rm-sources-list">
+            <!-- <ul id="rm-sources-list">
                 <?php foreach ($sources as $source): ?>
 
                     <li>
@@ -296,9 +296,47 @@ if (!defined('ABSPATH')) {
                     </li>
 
                 <?php endforeach; ?>
+            </ul> -->
+
+        </div>
+        
+        <div class="rm-card">
+
+            <h2>
+                Tiempo promedio
+            </h2>
+
+            <ul id="rm-page-time-list">
+
+                <?php foreach (
+                    $avg_page_time
+                    as $page
+                ): ?>
+
+                    <li>
+
+                        <span>
+                            <?= esc_html(
+                                rm_get_page_label(
+                                    $page->pagina
+                                )
+                            ); ?>
+                        </span>
+
+                        <strong>
+                            <?= gmdate(
+                                'i:s',
+                                (int)
+                                $page->promedio
+                            ); ?>
+                        </strong>
+
+                    </li>
+
+                <?php endforeach; ?>
+
             </ul>
 
         </div>
-
     </div>
 </div>
