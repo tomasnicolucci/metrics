@@ -29,7 +29,12 @@ function rm_dashboard_shortcode()
     }
 
     $summary =
-    rm_get_summary();
+        rm_get_summary();
+
+    $today_summary =
+        rm_get_summary(
+            'today'
+        );
 
     $top_pages =
         rm_get_top_pages();

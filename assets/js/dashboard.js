@@ -88,17 +88,17 @@ async function loadDashboard()
     
     
     document.getElementById(
-        'rm-today-visits'
+        'rm-period-visits'
     ).textContent =
         data.summary.visitas_hoy;
 
     document.getElementById(
-        'rm-unique-users'
+        'rm-period-users'
     ).textContent =
         data.summary.usuarios_unicos;
 
     document.getElementById(
-        'rm-pdf-opens'
+        'rm-period-pdfs'
     ).textContent =
         data.summary.pdf_opens;
 

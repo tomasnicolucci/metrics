@@ -19,60 +19,30 @@ if (!defined('ABSPATH')) {
         ); ?>
     </p>
 
-    <div class="rm-filters">
-
-        <label>
-            Período:
-        </label>
-
-        <select id="rm-period">
-
-            <option value="today">
-                Hoy
-            </option>
-
-            <option value="7">
-                Últimos 7 días
-            </option>
-
-            <option
-                value="30"
-                selected
-            >
-                Últimos 30 días
-            </option>
-
-            <option value="month">
-                Este mes
-            </option>
-
-        </select>
-
-    </div>
-
     <div class="rm-grid">
-
+        <h2>Datos de hoy</h2>
+        <br/>
         <div class="rm-card">
             <h3>Visitas hoy</h3>
 
             <div class="rm-number" id="rm-today-visits">
-                <?= $summary['visitas_hoy']; ?>
+                <?= $today_summary['visitas_hoy']; ?>
             </div>
         </div>
 
         <div class="rm-card">
             <h3>Usuarios únicos</h3>
 
-            <div class="rm-number" id="rm-unique-users">
-                <?= $summary['usuarios_unicos']; ?>
+            <div class="rm-number" id="rm-today-users">
+                <?= $today_summary['usuarios_unicos']; ?>
             </div>
         </div>
 
         <div class="rm-card">
             <h3>PDFs abiertos</h3>
 
-            <div class="rm-number" id="rm-pdf-opens">
-                <?= $summary['pdf_opens']; ?>
+            <div class="rm-number" id="rm-today-pdfs">
+                <?= $today_summary['pdf_opens']; ?>
             </div>
         </div>
 
@@ -83,7 +53,7 @@ if (!defined('ABSPATH')) {
                 class="rm-number"
                 id="rm-active-users"
             >
-                <?= $summary['visitantes_activos']; ?>
+                <?= $today_summary['visitantes_activos']; ?>
             </div>
         </div>
 
@@ -119,6 +89,37 @@ if (!defined('ABSPATH')) {
 
     </script>
 
+    <div class="rm-filters">
+        <h2>Datos Históricos</h2>
+        <label>
+            Período:
+        </label>
+
+        <select id="rm-period">
+
+            <option value="today">
+                Hoy
+            </option>
+
+            <option value="7">
+                Últimos 7 días
+            </option>
+
+            <option
+                value="30"
+                selected
+            >
+                Últimos 30 días
+            </option>
+
+            <option value="month">
+                Este mes
+            </option>
+
+        </select>
+
+    </div>
+    
     <!-- Grafico -->
     <div class="rm-grid">
 
@@ -141,7 +142,30 @@ if (!defined('ABSPATH')) {
     <div class="rm-grid">
 
         <div class="rm-card">
+            <h3>Visitas</h3>
 
+            <div class="rm-number" id="rm-period-visits">
+                <?= $summary['visitas_hoy']; ?>
+            </div>
+        </div>
+
+        <div class="rm-card">
+            <h3>Usuarios únicos</h3>
+
+            <div class="rm-number" id="rm-period-users">
+                <?= $summary['usuarios_unicos']; ?>
+            </div>
+        </div>
+
+        <div class="rm-card">
+            <h3>PDFs abiertos</h3>
+
+            <div class="rm-number" id="rm-period-pdfs">
+                <?= $summary['pdf_opens']; ?>
+            </div>
+        </div>
+
+        <div class="rm-card">
             <h2>Páginas más visitadas</h2>
 
             <ul id="rm-pages-list">

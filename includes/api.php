@@ -184,7 +184,7 @@ function rm_api_active_users()
 function rm_api_dashboard_realtime()
 {
     $summary =
-        rm_get_summary();
+        rm_get_summary('today');
 
     return [
 
@@ -213,20 +213,6 @@ function rm_api_dashboard_data(
         );
 
     $pages =
-        rm_get_top_pages();
-
-    foreach (
-        $pages
-        as $page
-    ) {
-
-        $page->label =
-            rm_get_page_label(
-                $page->pagina
-            );
-    }
-
-    $pages =
         rm_get_top_pages(
             $period
         );
@@ -242,7 +228,14 @@ function rm_api_dashboard_data(
     return [
 
         'summary' =>
-            rm_get_summary(),
+            rm_get_summary(
+                $period
+            ),
+
+        'today_summary' =>
+            rm_get_summary(
+                'today'
+            ),
 
         'visits' =>
             rm_get_daily_visits(
