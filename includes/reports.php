@@ -528,3 +528,108 @@ function rm_get_avg_page_time(
         )
     );
 }
+
+function rm_get_total_time_site(
+    $period = '30'
+)
+{
+    global $wpdb;
+
+    $table =
+        $wpdb->prefix .
+        'rm_page_time';
+
+    $dates =
+        rm_get_period_dates(
+            $period
+        );
+
+    return (int)
+        $wpdb->get_var(
+            $wpdb->prepare(
+                "
+                SELECT
+                    SUM(segundos)
+                FROM $table
+                WHERE DATE(fecha)
+                    BETWEEN %s
+                    AND %s
+
+                AND pagina NOT LIKE %s
+                AND pagina NOT LIKE %s
+                AND pagina NOT LIKE %s
+                ",
+                $dates['from'],
+                $dates['to'],
+
+                '%/cliente/%',
+                '%/wp-json/%',
+                '%/wp-admin/%',
+                '%/wp-login/%'
+            )
+        );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Funciones de etiquetas para Dashboard
+|--------------------------------------------------------------------------
+*/
+
+function rm_get_source_label(
+    $source
+)
+{
+    return match ($source) {
+
+        'Direct'   => 'Acceso directo',
+        'Referral' => 'Sitios externos',
+        'Google'   => 'Google',
+        'Social'   => 'Redes sociales',
+        'Email'    => 'Correo electrónico',
+
+        default => $source
+    };
+}
+
+function rm_get_resource_label(
+    $resource
+)
+{
+    static $labels = [
+
+        'https://drive.google.com/file/d/1B8Yukmbb3vUZUoj0OALR79nYQxkiM82s/view'
+            => 'Revista N° 1',
+
+        // Cuando agregues más recursos:
+        // 'https://....'
+        //     => 'Revista N° 2',
+    ];
+
+    return
+        $labels[$resource]
+        ??
+        $resource;
+}
+
+function rm_get_device_label(
+    $device
+)
+{
+    return match (
+        strtolower($device)
+    ) {
+
+        'desktop' =>
+            'PC de escritorio',
+
+        'mobile' =>
+            'Smartphone',
+
+        'tablet' =>
+            'Tablet',
+
+        default =>
+            $device
+    };
+}

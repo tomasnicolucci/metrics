@@ -145,6 +145,28 @@ function formatTime(
     );
 }
 
+function formatTime(
+    seconds
+) {
+
+    const hours =
+        Math.floor(
+            seconds / 3600
+        );
+
+    const minutes =
+        Math.floor(
+            (seconds % 3600) / 60
+        );
+
+    return (
+        hours +
+        'h ' +
+        minutes +
+        'm'
+    );
+}
+
 async function loadDashboard()
 {
     const value =
@@ -201,7 +223,7 @@ async function loadDashboard()
 
         const labels =
             data.sources.map(
-                source => source.source
+                source => source.label
             );
 
         const values =
@@ -241,6 +263,13 @@ async function loadDashboard()
         'rm-period-pdfs'
     ).textContent =
         data.summary.pdf_opens;
+
+    document.getElementById(
+        'rm-total-time'
+    ).textContent =
+        formatTime(
+            data.total_time
+        );
 
     document.getElementById(
         'rm-active-users'
@@ -343,7 +372,7 @@ async function loadDashboard()
                         `
                         <li>
                             <span>
-                                ${resource.recurso}
+                                ${resource.label}
                             </span>
 
                             <strong>

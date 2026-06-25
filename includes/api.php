@@ -241,6 +241,49 @@ function rm_api_dashboard_data(
             );
     }
 
+    $resources =
+        rm_get_top_resources(
+            $period
+        );
+
+    foreach (
+        $resources as $resource
+    ) {
+
+        $resource->label =
+            rm_get_resource_label(
+                $resource->recurso
+            );
+    }
+
+    $sources =
+        rm_get_sources(
+            $period
+        );
+
+    foreach (
+        $sources as $source
+    ) {
+
+        $source->label =
+            rm_get_source_label(
+                $source->source
+            );
+    }
+
+    $devices =
+        rm_get_devices();
+
+    foreach (
+        $devices as $device
+    ) {
+
+        $device->label =
+            rm_get_device_label(
+                $device->dispositivo
+            );
+    }
+
     return [
 
         'summary' =>
@@ -267,16 +310,20 @@ function rm_api_dashboard_data(
             ),
 
         'sources' =>
-            rm_get_sources(
-                $period
-            ),
+            $sources,
 
+        'top_resources' =>
+            $resources,
+                
         'top_pages' =>
             $pages,
 
-        'top_resources' =>
-                rm_get_top_resources(
-                    $period
-                )
+        'total_time' =>
+            rm_get_total_time_site(
+                $period
+            ),
+
+        'devices' =>
+            $devices,
     ];
 }

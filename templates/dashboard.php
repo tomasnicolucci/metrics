@@ -256,7 +256,11 @@ if (!defined('ABSPATH')) {
                 <?php foreach ($devices as $device): ?>
 
                     <li>
-                        <?= esc_html($device->dispositivo); ?>
+                        <?= esc_html(
+                            rm_get_device_label(
+                                $device->dispositivo
+                            )
+                        ); ?>
                         -
                         <?= $device->total; ?>
                     </li>
@@ -300,6 +304,21 @@ if (!defined('ABSPATH')) {
 
         </div>
         
+        <div class="rm-card">
+
+            <h3>
+                Tiempo total
+            </h3>
+
+            <div
+                class="rm-number"
+                id="rm-total-time"
+            >
+                00:00
+            </div>
+
+        </div>
+
         <div class="rm-card">
 
             <h2>
