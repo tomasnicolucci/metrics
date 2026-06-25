@@ -18,10 +18,9 @@ if (!defined('ABSPATH')) {
             wp_get_current_user()->display_name
         ); ?>
     </p>
-
+    
+    <h2>Datos de hoy</h2>
     <div class="rm-grid">
-        <h2>Datos de hoy</h2>
-        <br/>
         <div class="rm-card">
             <h3>Visitas hoy</h3>
 
@@ -219,6 +218,22 @@ if (!defined('ABSPATH')) {
 
             <h2>Países</h2>
 
+            <select id="rm-countries-type">
+
+                <option value="pie">
+                    Torta
+                </option>
+
+                <option value="bar">
+                    Barras
+                </option>
+
+            </select>
+
+            <canvas
+                id="rm-countries-chart"
+            ></canvas>
+
             <ul id="rm-countries-list">
                 <?php foreach ($countries as $country): ?>
 
@@ -255,6 +270,22 @@ if (!defined('ABSPATH')) {
 
             <h2>Fuentes de tráfico</h2>
 
+            <select id="rm-sources-type">
+
+                <option value="pie">
+                    Torta
+                </option>
+
+                <option value="bar">
+                    Barras
+                </option>
+
+            </select>
+
+            <canvas
+                id="rm-sources-chart"
+            ></canvas>
+
             <ul id="rm-sources-list">
                 <?php foreach ($sources as $source): ?>
 
@@ -268,5 +299,6 @@ if (!defined('ABSPATH')) {
             </ul>
 
         </div>
+
     </div>
 </div>

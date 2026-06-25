@@ -2,6 +2,9 @@ console.log(rmDashboard);
 console.log('rmTracker:', rmTracker);
 
 let visitsChart = null;
+let countriesChart = null;
+let sourcesChart = null;
+
 const ctx =
     document.getElementById(
         'rm-visits-chart'
@@ -45,6 +48,63 @@ if (
         );
 }
 
+function createSimpleChart(
+    canvasId,
+    chart,
+    type,
+    labels,
+    values
+)
+{
+    const canvas =
+        document.getElementById(
+            canvasId
+        );
+
+    if (!canvas) {
+        return null;
+    }
+
+    if (chart) {
+        chart.destroy();
+    }
+
+    return new Chart(
+        canvas,
+        {
+            type,
+            data: {
+
+                labels,
+
+                datasets: [
+                    {
+                        data: values
+                    }
+                ]
+            }
+        }
+    );
+}
+
+countriesChart =
+    createSimpleChart(
+        'rm-countries-chart',
+        countriesChart,
+        'pie',
+        [],
+        []
+    );
+
+sourcesChart =
+    createSimpleChart(
+        'rm-sources-chart',
+        sourcesChart,
+        'pie',
+        [],
+        []
+    );
+
 const period =
     document.getElementById(
         'rm-period'
@@ -84,9 +144,63 @@ async function loadDashboard()
     const data =
         await response.json();
 
+    if (data.countries) {
+
+    const labels =
+        data.countries.map(
+            country => country.pais
+        );
+
+    const values =
+        data.countries.map(
+            country =>
+                Number(
+                    country.total
+                )
+        );
+
+    countriesChart =
+        createSimpleChart(
+            'rm-countries-chart',
+            countriesChart,
+            document.getElementById(
+                'rm-countries-type'
+            ).value,
+            labels,
+            values
+        );
+    }
+
+    if (data.sources) {
+
+        const labels =
+            data.sources.map(
+                source => source.source
+            );
+
+        const values =
+            data.sources.map(
+                source =>
+                    Number(
+                        source.total
+                    )
+            );
+
+        sourcesChart =
+            createSimpleChart(
+                'rm-sources-chart',
+                sourcesChart,
+                document.getElementById(
+                    'rm-sources-type'
+                ).value,
+                labels,
+                values
+            );
+    }
+
     console.log(data);
-    
-    
+
+
     document.getElementById(
         'rm-period-visits'
     ).textContent =
@@ -235,5 +349,33 @@ async function loadDashboard()
 
         visitsChart.update();
     }
-    console.log(data);
+
 }
+
+const countriesType =
+    document.getElementById(
+        'rm-countries-type'
+    );
+
+if (countriesType) {
+
+    countriesType.addEventListener(
+        'change',
+        loadDashboard
+    );
+}
+
+const sourcesType =
+    document.getElementById(
+        'rm-sources-type'
+    );
+
+if (sourcesType) {
+
+    sourcesType.addEventListener(
+        'change',
+        loadDashboard
+    );
+}
+
+loadDashboard();
