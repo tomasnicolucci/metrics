@@ -31,6 +31,7 @@ require_once RM_PATH . 'includes/stats.php';
 require_once RM_PATH . 'includes/api.php';
 require_once RM_PATH . 'includes/cron.php';
 require_once RM_PATH . 'includes/reports.php';
+require_once RM_PATH . 'includes/export.php';
 require_once RM_PATH . 'includes/config.php';
 require_once RM_PATH . 'includes/realtime.php';
 

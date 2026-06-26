@@ -465,3 +465,29 @@ if (sourcesType) {
 }
 
 loadDashboard();
+
+const exportButton =
+    document.getElementById(
+        'rm-export-csv'
+    );
+
+if (exportButton) {
+
+    exportButton.addEventListener(
+        'click',
+        () => {
+
+            const period =
+                document.getElementById(
+                    'rm-period'
+                ).value;
+
+            window.location =
+                window.location.origin +
+                '/?rm_export=csv&period=' +
+                period;
+
+        }
+    );
+
+}

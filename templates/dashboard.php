@@ -89,33 +89,32 @@ if (!defined('ABSPATH')) {
     </script>
 
     <div class="rm-filters">
-        <h2>Datos Históricos</h2>
-        <label>
-            Período:
-        </label>
 
-        <select id="rm-period">
+        <h2>Datos históricos</h2>
 
-            <option value="today">
-                Hoy
-            </option>
+        <div class="rm-filter-actions">
 
-            <option value="7">
-                Últimos 7 días
-            </option>
+            <label>
+                Período:
+            </label>
 
-            <option
-                value="30"
-                selected
+            <select id="rm-period">
+
+                <option value="today">Hoy</option>
+                <option value="7">Últimos 7 días</option>
+                <option value="30" selected>Últimos 30 días</option>
+                <option value="month">Este mes</option>
+
+            </select>
+
+            <button
+                id="rm-export-csv"
+                class="button button-primary"
             >
-                Últimos 30 días
-            </option>
+                Exportar CSV
+            </button>
 
-            <option value="month">
-                Este mes
-            </option>
-
-        </select>
+        </div>
 
     </div>
     
@@ -125,7 +124,7 @@ if (!defined('ABSPATH')) {
         <div class="rm-card">
 
             <h3>
-                Visitas últimos 30 días
+                Visitas
             </h3>
 
             <canvas
@@ -165,7 +164,7 @@ if (!defined('ABSPATH')) {
         </div>
 
         <div class="rm-card">
-            <h2>Páginas más visitadas</h2>
+            <h3>Páginas más visitadas</h3>
 
             <ul id="rm-pages-list">
                 <?php foreach ($top_pages as $page): ?>
@@ -190,12 +189,12 @@ if (!defined('ABSPATH')) {
 
         <div class="rm-card">
 
-            <h2>
+            <h3>
                 <?= esc_html(
                     $config['labels']['resource']
                 ); ?>
                 más interactuados
-            </h2>
+            </h3>
 
             <ul id="rm-resources-list">
                 <?php foreach ($top_resources as $resource): ?>
@@ -216,7 +215,7 @@ if (!defined('ABSPATH')) {
 
         <div class="rm-card">
 
-            <h2>Países</h2>
+            <h3>Países</h3>
 
             <select id="rm-countries-type">
 
@@ -250,7 +249,7 @@ if (!defined('ABSPATH')) {
 
         <div class="rm-card">
 
-            <h2>Dispositivos</h2>
+            <h3>Dispositivos</h3>
 
             <ul>
                 <?php foreach ($devices as $device): ?>
@@ -272,7 +271,7 @@ if (!defined('ABSPATH')) {
 
         <div class="rm-card">
 
-            <h2>Fuentes de tráfico</h2>
+            <h3>Fuentes de ingreso</h3>
 
             <select id="rm-sources-type">
 
@@ -307,7 +306,7 @@ if (!defined('ABSPATH')) {
         <div class="rm-card">
 
             <h3>
-                Tiempo total
+                Tiempo de permanencia total
             </h3>
 
             <div
@@ -321,9 +320,9 @@ if (!defined('ABSPATH')) {
 
         <div class="rm-card">
 
-            <h2>
-                Tiempo promedio
-            </h2>
+            <h3>
+                Tiempo promedio por página
+            </h3>
 
             <ul id="rm-page-time-list">
 

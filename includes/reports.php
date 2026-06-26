@@ -344,6 +344,42 @@ function rm_get_page_label(
     );
 }
 
+function rm_is_internal_page(
+    $url
+)
+{
+    $internal = [
+
+        '/wp-admin',
+
+        '/wp-login.php',
+
+        '/login',
+
+        '/dashboard',
+
+        '/metricas'
+
+    ];
+
+    foreach (
+        $internal as $page
+    ) {
+
+        if (
+            strpos(
+                $url,
+                $page
+            ) !== false
+        ) {
+            return true;
+        }
+
+    }
+
+    return false;
+}
+
 function rm_get_daily_visits(
     $period = '30'
 )
@@ -568,6 +604,61 @@ function rm_get_total_time_site(
                 '%/wp-login/%'
             )
         );
+}
+
+function rm_get_total_time(
+    $period = '30'
+)
+{
+    global $wpdb;
+
+    $table =
+        $wpdb->prefix .
+        'rm_page_time';
+
+    $dates =
+        rm_get_period_dates(
+            $period
+        );
+
+    $rows =
+        $wpdb->get_results(
+            $wpdb->prepare(
+                "
+                SELECT
+                    pagina,
+                    segundos
+                FROM $table
+                WHERE DATE(fecha)
+                    BETWEEN %s
+                    AND %s
+                ",
+                $dates['from'],
+                $dates['to']
+            )
+        );
+
+    $total = 0;
+
+    foreach (
+        $rows as $row
+    ) {
+
+        if (
+            rm_is_internal_page(
+                $row->pagina
+            )
+        ) {
+            continue;
+        }
+
+        $total +=
+            (int)
+            $row->segundos;
+
+    }
+
+    return $total;
 }
 
 /*

@@ -168,6 +168,41 @@
     min-height: 300px;
 }
 
+.rm-filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rm-filter-actions label {
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+#rm-period {
+  flex: 2;
+  height: 40px;
+  font-size: 16px;
+}
+
+#rm-export-csv {
+  flex: 1;
+  height: 40px;
+  font-size: 16px;
+}
+
+#rm-export-csv {
+  background-color: #c23b6b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#rm-export-csv:hover {
+  background-color: #a32f58;
+}
+
 /* ==========================
    RESPONSIVE
 ========================== */
