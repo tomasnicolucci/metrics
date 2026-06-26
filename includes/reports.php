@@ -344,42 +344,6 @@ function rm_get_page_label(
     );
 }
 
-function rm_is_internal_page(
-    $url
-)
-{
-    $internal = [
-
-        '/wp-admin',
-
-        '/wp-login.php',
-
-        '/login',
-
-        '/dashboard',
-
-        '/metricas'
-
-    ];
-
-    foreach (
-        $internal as $page
-    ) {
-
-        if (
-            strpos(
-                $url,
-                $page
-            ) !== false
-        ) {
-            return true;
-        }
-
-    }
-
-    return false;
-}
-
 function rm_get_daily_visits(
     $period = '30'
 )
@@ -388,7 +352,7 @@ function rm_get_daily_visits(
 
     $table =
         $wpdb->prefix .
-        'rm_stats_daily';
+        'rm_page_views';
 
     $dates =
         rm_get_period_dates(
@@ -401,18 +365,32 @@ function rm_get_daily_visits(
     $to =
         $dates['to'];
 
+    if ($period === 'today') {
+
+        return rm_get_hourly_visits();
+    }
+
+    if ($period === '365') {
+
+        return rm_get_monthly_visits(
+            $from,
+            $to
+        );
+    }
+
     $rows =
         $wpdb->get_results(
             $wpdb->prepare(
                 "
                 SELECT
-                    fecha,
-                    visitas
+                    DATE(fecha) AS fecha,
+                    COUNT(*) AS visitas
                 FROM $table
-                WHERE fecha
-                BETWEEN %s
-                AND %s
-                ORDER BY fecha ASC
+                WHERE DATE(fecha)
+                    BETWEEN %s
+                    AND %s
+                GROUP BY DATE(fecha)
+                ORDER BY DATE(fecha)
                 ",
                 $from,
                 $to
@@ -438,11 +416,13 @@ function rm_get_daily_visits(
             );
 
         $result[$date] = [
+
             'dia' =>
                 date(
                     'd/m',
                     $current
                 ),
+
             'total' => 0
         ];
 
@@ -455,20 +435,178 @@ function rm_get_daily_visits(
 
     foreach ($rows as $row) {
 
-        if (
-            isset(
-                $result[
-                    $row->fecha
-                ]
+        $result[
+            $row->fecha
+        ]['total'] =
+            (int)
+            $row->visitas;
+    }
+
+    return array_values(
+        $result
+    );
+}
+
+function rm_get_monthly_visits(
+    $from,
+    $to
+)
+{
+    global $wpdb;
+
+    $table =
+        $wpdb->prefix .
+        'rm_page_views';
+
+    $rows =
+        $wpdb->get_results(
+            $wpdb->prepare(
+                "
+                SELECT
+                    YEAR(fecha) AS anio,
+                    MONTH(fecha) AS mes,
+                    COUNT(*) AS total
+                FROM $table
+                WHERE DATE(fecha)
+                    BETWEEN %s
+                    AND %s
+                GROUP BY
+                    YEAR(fecha),
+                    MONTH(fecha)
+                ORDER BY
+                    YEAR(fecha),
+                    MONTH(fecha)
+                ",
+                $from,
+                $to
             )
+        );
+
+    $months = [
+
+        1  => 'Ene',
+        2  => 'Feb',
+        3  => 'Mar',
+        4  => 'Abr',
+        5  => 'May',
+        6  => 'Jun',
+        7  => 'Jul',
+        8  => 'Ago',
+        9  => 'Sep',
+        10 => 'Oct',
+        11 => 'Nov',
+        12 => 'Dic'
+
+    ];
+
+    $result = [];
+
+    $current =
+        new DateTime($from);
+
+    $current->modify('first day of this month');
+
+    $end =
+        new DateTime($to);
+
+    $end->modify('first day of this month');
+
+    while ($current <= $end) {
+
+        $key =
+            $current->format('Y-n');
+
+        $result[$key] = [
+
+            'dia' =>
+                $months[
+                    (int)
+                    $current->format('n')
+                ],
+
+            'total' => 0
+
+        ];
+
+        $current->modify('+1 month');
+    }
+
+    foreach ($rows as $row) {
+
+        $key =
+            $row->anio .
+            '-' .
+            $row->mes;
+
+        if (
+            isset($result[$key])
         ) {
 
-            $result[
-                $row->fecha
-            ]['total'] =
+            $result[$key]['total'] =
                 (int)
-                $row->visitas;
+                $row->total;
         }
+    }
+
+    return array_values(
+        $result
+    );
+}
+
+function rm_get_hourly_visits()
+{
+    global $wpdb;
+
+    $table =
+        $wpdb->prefix .
+        'rm_page_views';
+
+    $today =
+        current_time('Y-m-d');
+
+    $rows =
+        $wpdb->get_results(
+            $wpdb->prepare(
+                "
+                SELECT
+                    HOUR(fecha) AS hora,
+                    COUNT(*) AS total
+                FROM $table
+                WHERE DATE(fecha) = %s
+                GROUP BY HOUR(fecha)
+                ORDER BY HOUR(fecha)
+                ",
+                $today
+            )
+        );
+
+    $result = [];
+
+    for ($i = 0; $i < 24; $i++) {
+
+        $label =
+            str_pad(
+                $i,
+                2,
+                '0',
+                STR_PAD_LEFT
+            ) . ':00';
+
+        $result[$i] = [
+
+            'dia' => $label,
+
+            'total' => 0
+
+        ];
+    }
+
+    foreach ($rows as $row) {
+
+        $result[
+            (int)$row->hora
+        ]['total'] =
+            (int)$row->total;
     }
 
     return array_values(
@@ -510,7 +648,17 @@ function rm_get_period_dates(
                 ),
                 'to' => $today
             ];
+        
+        case '365':
 
+            return [
+                'from' => date(
+                    'Y-m-d',
+                    strtotime('-364 days')
+                ),
+                'to' => $today
+            ];
+        
         case '30':
         default:
 
@@ -659,6 +807,50 @@ function rm_get_total_time(
     }
 
     return $total;
+}
+
+function rm_is_internal_page(
+    $url
+)
+{
+    if (
+        empty($url)
+    ) {
+        return false;
+    }
+
+    $path =
+        wp_parse_url(
+            $url,
+            PHP_URL_PATH
+        );
+
+    $internal = [
+
+        '/wp-login.php',
+        '/wp-admin',
+        '/dashboard',
+        '/metricas',
+        '/login'
+
+    ];
+
+    foreach (
+        $internal as $page
+    ) {
+
+        if (
+            strpos(
+                $path,
+                $page
+            ) === 0
+        ) {
+            return true;
+        }
+
+    }
+
+    return false;
 }
 
 /*

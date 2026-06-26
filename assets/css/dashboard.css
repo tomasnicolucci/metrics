@@ -163,6 +163,12 @@
    CANVAS / GRÁFICOS
 ========================== */
 
+.rm-chart-container{
+    position: relative;
+    height: 320px;
+    width: 100%;
+}
+
 #rm-visits-chart {
     width: 100%;
     min-height: 300px;

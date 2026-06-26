@@ -43,6 +43,19 @@ if (
                             data
                         }
                     ]
+                },
+                options: {
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    scales:{
+                        y:{
+                            beginAtZero:true,
+                            suggestedMin:0,
+                            ticks:{
+                                precision:0
+                            }
+                        }
+                    },
                 }
             }
         );
@@ -175,6 +188,31 @@ async function loadDashboard()
                 'rm-period'
             )
             .value;
+
+    const chartTitle =
+        document.getElementById(
+            'rm-chart-title'
+        );
+
+    switch (value) {
+
+        case 'today':
+
+            chartTitle.textContent =
+                'Visitas por hora';
+            break;
+
+        case '365':
+
+            chartTitle.textContent =
+                'Visitas por mes';
+            break;
+
+        default:
+
+            chartTitle.textContent =
+                'Visitas por día';
+    }
 
     const response =
         await fetch(

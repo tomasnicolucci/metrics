@@ -104,6 +104,7 @@ if (!defined('ABSPATH')) {
                 <option value="7">Últimos 7 días</option>
                 <option value="30" selected>Últimos 30 días</option>
                 <option value="month">Este mes</option>
+                <option value="365">Último año</option>
 
             </select>
 
@@ -123,13 +124,13 @@ if (!defined('ABSPATH')) {
 
         <div class="rm-card">
 
-            <h3>
-                Visitas
+            <h3 id="rm-chart-title">
+                Visitas por día
             </h3>
 
-            <canvas
-                id="rm-visits-chart"
-            ></canvas>
+            <div class="rm-chart-container">
+                <canvas id="rm-visits-chart"></canvas>
+            </div>
 
         </div>
 

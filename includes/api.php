@@ -126,6 +126,23 @@ function rm_api_page_time(
         $wpdb->prefix .
         'rm_page_time';
 
+    $page =
+        sanitize_text_field(
+            $request['page']
+        );
+
+    if (
+        rm_is_internal_page(
+            $page
+        )
+    ) {
+
+        return [
+            'success' => true
+        ];
+
+    }
+
     $wpdb->insert(
         $table,
         [
@@ -133,9 +150,7 @@ function rm_api_page_time(
                 rm_get_session_id(),
 
             'pagina' =>
-                sanitize_text_field(
-                    $request['page']
-                ),
+                $page,
 
             'segundos' =>
                 intval(
