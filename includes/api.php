@@ -66,21 +66,20 @@ add_action('rest_api_init', function () {
         [
             'methods' => 'GET',
             'callback' => 'rm_api_dashboard_data',
-            'permission_callback' => '__return_true'
-            // function () {
-            //     return
-            //         is_user_logged_in()
-            //         &&
-            //         (
-            //             current_user_can(
-            //                 'administrator'
-            //             )
-            //             ||
-            //             current_user_can(
-            //                 'cliente_metricas'
-            //             )
-            //         );
-            // }
+            'permission_callback' => function () {
+                return
+                    is_user_logged_in()
+                    &&
+                    (
+                        current_user_can(
+                            'administrator'
+                        )
+                        ||
+                        current_user_can(
+                            'cliente_metricas'
+                        )
+                    );
+            }
         ]
     );
 

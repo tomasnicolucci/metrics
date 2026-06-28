@@ -358,4 +358,11 @@ if (!defined('ABSPATH')) {
 
         </div>
     </div>
+
+    <div class="rm-watermark">
+
+        Developed by TN Metrics • v1.0.0
+
+    </div>
+
 </div>
