@@ -45,6 +45,11 @@ add_action(
     'rm_enqueue_scripts'
 );
 
+add_action(
+    'wp_enqueue_scripts',
+    'rm_enqueue_common_styles'
+);
+
 function rm_enqueue_scripts()
 {
     wp_enqueue_script(
@@ -66,6 +71,16 @@ function rm_enqueue_scripts()
                 'wp_rest'
             )
         ]
+    );
+}
+
+function rm_enqueue_common_styles()
+{
+    wp_enqueue_style(
+        'rm-common',
+        RM_URL . 'assets/css/common.css',
+        [],
+        RM_VERSION
     );
 }
 

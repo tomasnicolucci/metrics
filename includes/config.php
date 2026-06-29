@@ -43,6 +43,7 @@ function rm_get_config()
 
             '/cliente/login/',
             '/cliente/dashboard/',
+            '/cliente/',
             '/wp-login.php',
             '/wp-admin/'
         ],

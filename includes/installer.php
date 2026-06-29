@@ -173,17 +173,6 @@ function rm_create_pages()
 {
     $cliente_id = rm_create_cliente_page();
 
-    if (!get_page_by_path('cliente/login')) {
-        wp_insert_post([
-            'post_title'   => 'Login Cliente',
-            'post_name'    => 'login',
-            'post_status'  => 'publish',
-            'post_type'    => 'page',
-            'post_parent'  => $cliente_id,
-            'post_content' => '[rm_login]'
-        ]);
-    }
-
     if (!get_page_by_path('cliente/dashboard')) {
         wp_insert_post([
             'post_title'   => 'Dashboard Cliente',

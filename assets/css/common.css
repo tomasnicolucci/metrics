@@ -1,0 +1,23 @@
+.rm-logout-button{
+    display:inline-flex !important;
+    align-items:center;
+    justify-content:center;
+    width:auto !important;
+    min-width:170px;
+    max-width:170px;
+    height:42px;
+    padding:0 18px !important;
+    margin:0 !important;
+    background:#c23b6b;
+    color:#fff !important;
+    border-radius:8px;
+    text-decoration:none !important;
+    font-size:16px !important;
+    font-weight:600 !important;
+    line-height:1 !important;
+    white-space:nowrap;
+}
+
+.rm-logout-button:hover{
+    background-color: #a32f58
+}

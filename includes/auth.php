@@ -4,30 +4,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-add_shortcode(
-    'rm_login',
-    'rm_login_shortcode'
-);
-
-function rm_login_shortcode()
-{
-    if (is_user_logged_in()) {
-
-        wp_redirect(
-            home_url('/cliente/dashboard')
-        );
-
-        exit;
-    }
-
-    ob_start();
-
-    include RM_PATH .
-        'templates/login.php';
-
-    return ob_get_clean();
-}
-
 add_action(
     'admin_init',
     'rm_block_admin'
@@ -46,4 +22,21 @@ function rm_block_admin()
 
         exit;
     }
+}
+
+add_shortcode(
+    'rm_logout',
+    'rm_logout_shortcode'
+);
+
+function rm_logout_shortcode()
+{
+    return sprintf(
+        '<a class="rm-logout-button" href="%s">Cerrar sesión</a>',
+        esc_url(
+            wp_logout_url(
+                home_url('/cliente/login')
+            )
+        )
+    );
 }

@@ -64,3 +64,6 @@ El plugin se encuentra en desarrollo activo y continúa incorporando nuevas func
 ## Sobre la implementación
 
 Para que el registro de las métricas de localizaciones es necesario crear la carpeta [geo] y colocar dentro el archivo [GeoLite2-City.mmdb] que se puede obtener de la página de maxmind.com
+
+### Autenticación
+El plugin no implementa autenticación. Requiere que el sitio gestione el acceso mediante el sistema de usuarios de WordPress.

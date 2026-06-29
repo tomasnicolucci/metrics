@@ -6,12 +6,6 @@ if (!defined('ABSPATH')) {
 
 <div class="rm-container">
 
-    <h1>
-        <?= esc_html(
-            $config['labels']['dashboard_title']
-        ); ?>
-    </h1>
-
     <p>
         Bienvenido
         <?= esc_html(

@@ -131,7 +131,8 @@ function rm_save_page_view(
         str_contains($path, '/wp-json/') ||
         str_contains($path, '/feed/') ||
         str_contains($path, '/wp-admin/') ||
-        str_contains($path, '/wp-login.php')
+        str_contains($path, '/wp-login.php') ||
+        str_contains($path, '/cliente/')
 
     ) {
         return;
