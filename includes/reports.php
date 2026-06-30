@@ -123,22 +123,44 @@ function rm_get_top_pages(
             $period
         );
 
+    $home =
+        untrailingslashit(
+            home_url()
+        );
+
     return $wpdb->get_results(
         $wpdb->prepare(
             "
             SELECT
-                pagina,
+                CASE
+                    WHEN TRIM(TRAILING '/' FROM pagina) = %s
+                    THEN %s
+                    ELSE pagina
+                END AS pagina,
                 COUNT(*) AS total
             FROM $table
             WHERE DATE(fecha)
                 BETWEEN %s
                 AND %s
-            GROUP BY pagina
+                AND pagina NOT LIKE %s
+                AND pagina NOT LIKE %s
+            GROUP BY
+                CASE
+                    WHEN TRIM(TRAILING '/' FROM pagina) = %s
+                    THEN %s
+                    ELSE pagina
+                END
             ORDER BY total DESC
             LIMIT %d
             ",
+            $home,
+            trailingslashit($home),
             $dates['from'],
             $dates['to'],
+            '%/cliente/%',
+            '%wp-login.php%',
+            $home,
+            trailingslashit($home),
             $limit
         )
     );

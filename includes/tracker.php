@@ -98,11 +98,16 @@ function rm_save_page_view(
     $current_url =
         esc_url_raw(
             home_url(
-                add_query_arg(
-                    [],
-                    $_SERVER['REQUEST_URI']
+                wp_parse_url(
+                    $_SERVER['REQUEST_URI'],
+                    PHP_URL_PATH
                 )
             )
+        );
+
+    $current_url =
+        untrailingslashit(
+            $current_url
         );
 
     $path = wp_parse_url(
